@@ -98,7 +98,7 @@ const Question = () => {
   const textStyles = {
     fontSize: '16px',
     marginBottom: '10px',
-    
+    textAlign: 'center'    
   };
   const textStylesTitle = {
     fontSize: '20px',
@@ -116,20 +116,30 @@ const Question = () => {
     justifyContent: 'center',
   };
 
-  const matchingCoffeeContainerStyle = {
+  const gridContainerStyle = {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gridTemplateRows: 'repeat(4, auto)',
+    gap: '10px',
+    justifyContent: 'center',
+    alignItems: 'center',
     textAlign: 'center',
-     flex: '1', 
-     justifyContent: 'flex-end',
-    marginTop: '20px',
-    display: 'flex', // 수평 정렬을 위해 추가
-    justifyContent: 'space-between', // 수평 정렬을 위해 추가
-    alignItems: 'center', // 수직 정렬을 위해 추가
+    width: '80%',
+    margin: '0 auto',
   };
-  
-  const innerDivStyle = {
-    alignItems: 'center', // 수직 정렬을 위해 추가
-    textAlign: 'center', // 왼쪽 정렬을 위해 추가
-    margin: '0 10px'
+
+  const buttonFullStyle = {
+    gridColumn: '1 / span 2',
+    display: 'flex',
+    justifyContent: 'center',
+  };
+
+  const leftCellStyle = {
+    marginRight: '30%',
+  };
+
+  const rightCellStyle = {
+    marginLeft: '30%',
   };
 
   return (
@@ -139,84 +149,82 @@ const Question = () => {
           <p style={{ fontSize: '18px', fontWeight: 'bold' }}>
             {questions[currentQuestion]}
           </p>
-          <button
-            style={buttonStyle}
-            onClick={() => handleButtonClick(0)}
-          >
-            <img
-              src={
-                currentQuestion === 0
-                  ? img1
-                  : currentQuestion === 1
-                  ? img3
-                  : currentQuestion === 2
-                  ? img5
-                  : currentQuestion === 3
-                  ? img7
-                  : img9
-              }
-              alt={`img${currentQuestion * 2 + 1}`}
-              style={imageStyle}
-            />
-          </button>
-          <button
-            style={buttonStyle}
-            onClick={() => handleButtonClick(1)}
-          >
-            <img
-              src={
-                currentQuestion === 0
-                  ? img2
-                  : currentQuestion === 1
-                  ? img4
-                  : currentQuestion === 2
-                  ? img6
-                  : currentQuestion === 3
-                  ? img8
-                  : img10
-              }
-              alt={`img${currentQuestion * 2 + 2}`}
-              style={imageStyle}
-            />
-          </button>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <button
+              style={buttonStyle}
+              onClick={() => handleButtonClick(0)}
+            >
+              <img
+                src={
+                  currentQuestion === 0
+                    ? img1
+                    : currentQuestion === 1
+                    ? img3
+                    : currentQuestion === 2
+                    ? img5
+                    : currentQuestion === 3
+                    ? img7
+                    : img9
+                }
+                alt={`img${currentQuestion * 2 + 1}`}
+                style={imageStyle}
+              />
+            </button>
+            <button
+              style={buttonStyle}
+              onClick={() => handleButtonClick(1)}
+            >
+              <img
+                src={
+                  currentQuestion === 0
+                    ? img2
+                    : currentQuestion === 1
+                    ? img4
+                    : currentQuestion === 2
+                    ? img6
+                    : currentQuestion === 3
+                    ? img8
+                    : img10
+                }
+                alt={`img${currentQuestion * 2 + 2}`}
+                style={imageStyle}
+              />
+            </button>
+          </div>
         </div>
       )}
       {matchingCoffee && (
         <>
-        <p style={textStylesTitle}> 당신의 커피 취향은?</p>
-        <div style={matchingCoffeeContainerStyle}>
-          <div style={innerDivStyle}>
-            <p style={{textStyles }}>{matchingCoffee} </p>
-            <br/>
-          <p style={{textStyles }}>: {matchingdec}</p>
-          </div>
-          <div style={innerDivStyle}>
+          <div style={gridContainerStyle}>
+            <p style={{ ...textStylesTitle, gridColumn: '1 / span 2' }}>당신의 커피 취향은?</p>
+            <p style={{ ...textStyles, ...leftCellStyle }}>{matchingCoffee}</p>
             <img
               style={{
-                maxWidth: '15%',
+                maxWidth: '30%',
                 height: 'auto',
-                marginBottom: '10px',
+                gridRow: '2 / span 2',
+                ...rightCellStyle,
               }}
               alt={'커피이미지'}
               src={coffee}
             />
-            <br />
-            <button
-              style={{
-                margin: '0 10px',
-                padding: '10px 15px',
-                fontSize: '14px',
-                cursor: 'pointer',
-                backgroundColor: 'white',
-                borderColor: 'white',
-                color: 'black',
-              }}
-              onClick={Shops}
-            >
-              구매하러 가기
-            </button>
+            <p style={{ ...textStyles, ...leftCellStyle }}>: {matchingdec}</p>
+            <div style={{ ...buttonFullStyle, gridColumn: '1 / span 2' }}>
+              <button
+                style={{
+                  padding: '10px 15px',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  backgroundColor: 'white',
+                  borderColor: 'white',
+                  color: 'black',
+                }}
+                onClick={Shops}
+              >
+                구매하러 가기
+              </button>
+            </div>
           </div>
-        </div>
         </>
       )}
     </div>

@@ -1,3 +1,5 @@
 node_modules
 .env
 fbase.js
+package-lock.json
+package.json

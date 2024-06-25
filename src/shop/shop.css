@@ -1,265 +1,280 @@
+/* shop.css */
 .shop-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    /* align-items: center; */
-  }
-
-  .shop-nav, .detail-button-container{
-    margin-bottom: -0.5rem;
-    justify-content: flex-start;
-    background-color: black;
-    width:max-content;
-  }
-  
-  .shop-nav ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .shop-nav li {
-    display: inline;
-    margin-right: 7.5px;
-    margin-left: 7.5px;
-  }
-  
-  .shop-nav a {
-    text-decoration: none;
-    color: white;
-    font-weight: bold;
-    padding: 8px;
-    border-radius: 4px;
-    transition: background-color 0.3s;
-  }
-  
-  .shop-nav a:hover, .detail-button-container button:hover {
-    background-color: #f0f0f0;
-    color: black;
-  }
-  
-  
-  .product-list-next-button {
-    background-color: #000000;
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  
-  .product-list-next-button:hover {
-    background-color: #4a4a4a;
-  }
-  
-  .products-container {
-    margin-top: 20px;
-  }
-  
-  .products-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .products-list-item {
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    display: flex; /* Make the items flex containers */
-  } 
-
-  .product-details {
-    margin-left: 20px; /* Adjust the margin as needed */
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .products-list-item a {
-    text-decoration: none;
-    color: #333;
-  }
-  
-  .products-list-item h3 {
-    margin: 0;
-    font-size: 1.2em;
-  }
-  
-  .products-metadata {
-    color: #555;
-    font-size: 0.8em;
-  }
-  
-  .products-metadata p {
-    margin: 5px 0;
-  }
-
-  .filter-table{
-    margin-top:25px;
-    margin-bottom: 5px;
-  }
-
-  .filter-table th {
-    background-color: #000000;
-    color:white;
-    text-align: center;
-    width:20%
-  }
-
-  .filter-group {
-    display: flex;
-    align-items: flex-start;
-    /* max-width: 80%; */
-    /* margin-bottom: 5%; */
-  }
-
-  .filter-group input{
-    margin-right: 3px;
-  }
-  
-  .filter-group label { 
-    position: relative;
-    cursor: pointer;
-    margin-bottom: -5px;
-    margin-right: 5px;
-    margin-left: 5px;
-    border-radius: 4px;
-    /* transition: background-color 0.3s; */
-  }
-  
-  .filter-group h3{
-    display: block;
-    /* padding-left: 40px; */
-    font-weight: bold;
-    margin-bottom:0.5rem;
-  }
-
-  
-  .sort-group input[type="checkbox"] {
-    display: none;
-  }
-  
-  .sort-group {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    align-items: flex-end;
-  }
-  
-  .sort-group label {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    padding-right: 35px;
-    cursor: pointer;
-    flex: 1;
-    white-space: nowrap;
-    margin: 10px;
-  }
-
-  .sort-group td {
-  width: 70%; /* Adjust the width as needed */
-  padding-left: 10px; /* Adjust the padding as needed */
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
 }
 
-  .detail-container{
-    display: flex; flex-direction: column; align-items: center;
-  }
+.shop-nav, .detail-button-container{
+  margin-bottom: -0.5rem;
+  justify-content: flex-start;
+  background-color: black;
+  width:max-content;
+}
 
-  .detail-container h2{
-    margin-bottom: 1rem;
-    padding: 0.4rem 0.8rem;
-  }
+.shop-nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
-  .button-container {
-    display: flex;
-    flex-direction: row;
-    margin-top: 1rem;
-    background-color: #000000;
-  }
+.shop-nav li {
+  display: inline;
+  margin-right: 7.5px;
+  margin-left: 7.5px;
+}
 
-  .button-container button{
-    color:black
-  }
+.shop-nav a {
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 4px;
+  color: white;
+}
 
-  .button-container button a{
-    color:white;
-  }
+.shop-nav .active-link {
+  color: black;
+  font-weight: bold;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: white;
+}  
 
-  .detail-rating{
-    display: flex;
-    align-items: center;
-    /* justify-content: center; */
-  }
-  
-  .detail-container button{
-    border: rgb(255, 255, 255);
-    background-color: #000000;
-  }
+.product-list-next-button {
+  background-color: #000000;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
 
-  .user-review-container{
-    margin-bottom: 5%;
-    width:60%;
-  }
+.product-list-next-button:hover {
+  background-color: #4a4a4a;
+}
 
-  .user-review-container h2{
-    text-align: center;
-  }
-  .detail-image-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%; /* Ensure that the container takes up the full height of its parent */
-  }
-  
-  .detail-image {
-    width: 75px;
-    height: 75px;
-  }
+.products-container {
+  margin-top: 20px;
+}
 
-  .detail-container table{
-    border:none;
-    /* display: flex; */
-    margin-left: 30px;
-    margin-bottom: 5%;
-    height: 75%;
-  }
+.products-list {
+  list-style: none;
+  padding: 0;
+}
 
-  .detail-container, table tr:nth-child(even){
-    background-color: white;
-  }
+.products-list-item {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  display: flex; /* Make the items flex containers */
+} 
 
-  .detail-container th {
-    font-weight: bold;
-    color: #333;
-    text-align: start;
-  }
+.product-details {
+  margin-left: 20px; /* Adjust the margin as needed */
+  display: flex;
+  flex-direction: column;
+}
 
-  .detail-container td {
-    text-align: end;
-    text-align: start;
-  }
-  
-  .detail-button-container button {
-    background-color: black;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  .detail-button-container button:hover {
-    background-color: white !important;
-    color: black !important;
-  }
-  
-  .pagination-button{
-    align-self: center;
-  }
+.products-list-item a {
+  text-decoration: none;
+  color: #333;
+}
 
-  .detail-review{
-    margin-left: 50px;
-  }
+.products-list-item h3 {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.products-metadata {
+  color: #555;
+  font-size: 0.8em;
+}
+
+.products-metadata p {
+  margin: 5px 0;
+}
+
+.filter-table{
+  margin-top:25px;
+  margin-bottom: 5px;
+}
+
+.filter-table th {
+  background-color: #000000;
+  color:white;
+  text-align: center;
+  width:20%
+}
+
+.filter-group {
+  display: flex;
+  align-items: flex-start;
+  /* max-width: 80%; */
+  /* margin-bottom: 5%; */
+}
+
+.filter-group input{
+  margin-right: 3px;
+}
+
+.filter-group label { 
+  position: relative;
+  cursor: pointer;
+  margin-bottom: -5px;
+  margin-right: 5px;
+  margin-left: 5px;
+  border-radius: 4px;
+  /* transition: background-color 0.3s; */
+}
+
+.filter-group h3{
+  display: block;
+  /* padding-left: 40px; */
+  font-weight: bold;
+  margin-bottom:0.5rem;
+}
+
+
+.sort-group input[type="checkbox"] {
+  display: none;
+}
+
+.sort-group {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  align-items: flex-end;
+}
+
+.sort-group label {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  padding-right: 35px;
+  cursor: pointer;
+  flex: 1;
+  white-space: nowrap;
+  margin: 10px;
+}
+
+.sort-group td {
+width: 70%; /* Adjust the width as needed */
+padding-left: 10px; /* Adjust the padding as needed */
+}
+
+.detail-container{
+  display: flex; flex-direction: column; align-items: center;
+}
+
+.detail-container h2{
+  margin-bottom: 1rem;
+  padding: 0.4rem 0.8rem;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  margin-top: 1rem;
+  background-color: #000000;
+}
+
+.button-container button{
+  color:black
+}
+
+.button-container button a{
+  color:white;
+}
+
+.detail-rating{
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+}
+
+.detail-container button{
+  border: rgb(255, 255, 255);
+  background-color: #000000;
+}
+
+.user-review-container{
+  margin-bottom: 5%;
+  width:60%;
+}
+
+.user-review-container h2{
+  text-align: center;
+}
+.detail-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensure that the container takes up the full height of its parent */
+}
+
+.detail-image {
+  width: 75px;
+  height: 75px;
+}
+
+.detail-container table{
+  border:none;
+  /* display: flex; */
+  margin-left: 30px;
+  margin-bottom: 5%;
+  height: 75%;
+}
+
+.detail-container, table tr:nth-child(even){
+  background-color: white;
+}
+
+.detail-container th {
+  font-weight: bold;
+  color: #333;
+  text-align: start;
+}
+
+.detail-container td {
+  text-align: end;
+  text-align: start;
+}
+
+.detail-button-container button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.detail-button-container button:hover {
+  background-color: white !important;
+  color: black !important;
+}
+
+.pagination-button{
+  align-self: center;
+}
+
+.detail-review{
+  margin-left: 50px;
+}
+
+.loading-container {
+  position: fixed; /* 고정 위치 */
+  top: 50%; /* 화면 세로 중앙 기준 */
+  left: 50%; /* 화면 가로 중앙 기준 */
+  transform: translate(-50%, -50%); /* 세로 및 가로 중앙 정렬 */
+  background-color: rgba(255, 255, 255, 0.8); /* 배경색 및 투명도 조절 */
+  padding: 20px; /* 내부 여백 */
+  border-radius: 8px; /* 둥근 테두리 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+  z-index: 9999; /* 다른 요소 위에 표시 */
+  text-align: center; /* 내용 가운데 정렬 */
+}

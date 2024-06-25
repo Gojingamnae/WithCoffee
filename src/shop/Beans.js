@@ -1,7 +1,8 @@
+// Beans.js
 import React, { useEffect, useState } from 'react';
 import { dbService } from '../fbase';
-import { Link } from 'react-router-dom';
-import { collection, getDocs, doc } from 'firebase/firestore';
+import { Link, useLocation } from 'react-router-dom';
+import {  collection, getDocs, doc, query, orderBy  } from 'firebase/firestore';
 import BeansLoadList from './BeansLoadList';
 import { getDatabase, ref, get, limitToFirst, onValue, orderByKey } from "firebase/database";
 import shop from './shop.css';
@@ -30,24 +31,28 @@ const Beans = () => {
   const db = getDatabase();
   const BeansRef = ref(db, 'Beans');
  
-  get(BeansRef).then((snapshot) => {
-    if (snapshot.exists()) {
-      const products = [];
-      snapshot.forEach((childSnapshot) => {
-        const productId = childSnapshot.key;
-        const productData = childSnapshot.val();
-        products.push({
-          id: productId,
-          ...productData,
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const q = query(collection(dbService, 'Beans'), orderBy('purchaseCnt', 'desc'));
+        const querySnapshot = await getDocs(q);
+        const productsData = [];
+        querySnapshot.forEach((doc) => {
+          productsData.push({
+            id: doc.id,
+            ...doc.data()
+          });
         });
-      });
-      setProducts(products);
-    } else {
-      console.log("No data available");
-    }
-  }).catch((error) => {
-    console.error("Error fetching data:", error);
-  });
+        setProducts(productsData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData(); // 인기순으로 데이터를 가져오도록 수정
+
+  }, []);
+
 
   useEffect(() => {
     const filtered = products.filter(product => {
@@ -126,8 +131,6 @@ const Beans = () => {
     return pageNumbers;
   };
   
-
-
   const checkPriceRange = (price, range) => {
     switch (range) {
       case '0':
@@ -179,12 +182,12 @@ const handleSortOrder = (value) => {
   setSortOrder((prevFilter) => (prevFilter === value ? '' : value));
 };
 
-
+const location = useLocation();
   return (
     <div className="shop-container">
       <nav className="shop-nav">
-        <li><Link to="/shop/Beans">원두</Link></li>
-        <li><Link to="/shop/Tools">도구</Link></li>
+        <li><Link to="/shop/Beans" className={location.pathname === '/shop/Beans' ? 'active-link' : ''}>원두</Link></li>
+        <li><Link to="/shop/Tools" className={location.pathname === '/shop/Tools' ? 'active-link' : ''}>도구</Link></li>
       </nav>
 
       <div className="filter-container">
@@ -355,7 +358,7 @@ const handleSortOrder = (value) => {
             type="checkbox"
             value="popularity"
             checked={sortOrder === 'popularity' || sortOrder === ''}
-            onChange={() => handleSortOrder(sortOrder === 'popularity' ? '' : 'popularity')}
+            onChange={() => handleSortOrder(sortOrder === 'popularity' ? 'popularity' : 'popularity')}
           />
           인기순
         </label>
@@ -367,7 +370,7 @@ const handleSortOrder = (value) => {
             type="checkbox"
             value="priceHigh"
             checked={sortOrder === 'priceHigh'}
-            onChange={() => handleSortOrder(sortOrder === 'priceHigh' ? '' : 'priceHigh')}
+            onChange={() => handleSortOrder(sortOrder === 'priceHigh' ? 'priceHigh' : 'priceHigh')}
           />
           가격 높은 순
         </label>
@@ -379,7 +382,7 @@ const handleSortOrder = (value) => {
             type="checkbox"
             value="priceLow"
             checked={sortOrder === 'priceLow'}
-            onChange={() => handleSortOrder(sortOrder === 'priceLow' ? '' : 'priceLow')}
+            onChange={() => handleSortOrder(sortOrder === 'priceLow' ? 'priceLow' : 'priceLow')}
           />
           가격 낮은 순
         </label>
@@ -391,7 +394,7 @@ const handleSortOrder = (value) => {
             type="checkbox"
             value="ratingHigh"
             checked={sortOrder === 'ratingHigh'}
-            onChange={() => handleSortOrder(sortOrder === 'ratingHigh' ? '' : 'ratingHigh')}
+            onChange={() => handleSortOrder(sortOrder === 'ratingHigh' ? 'ratingHigh' : 'ratingHigh')}
           />
           인터넷 별점 높은 순
         </label>

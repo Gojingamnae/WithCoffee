@@ -1,6 +1,7 @@
+// Details.js
 import React, { useEffect, useState } from 'react';
 import { dbService, authService} from '../fbase';
-import { doc, getDoc, getDocs, query, where, collection, setDoc} from 'firebase/firestore';
+import { doc, getDoc, getDocs, query, where, collection, setDoc, updateDoc} from 'firebase/firestore';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaStar } from 'react-icons/fa';
 import shop from './shop.css';
@@ -16,47 +17,71 @@ const Detail = () => {
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const beansProductDoc = doc(dbService, 'Beans', productId);
-        const beansProductSnapshot = await getDoc(beansProductDoc);
-  
-        if (beansProductSnapshot.exists()) {
-          setSelectedProduct({ id: beansProductSnapshot.id, ...beansProductSnapshot.data() });
+  const fetchProduct = async () => {
+    try {
+      let productData = null;
+      const beansProductDoc = doc(dbService, 'Beans', productId);
+      const beansProductSnapshot = await getDoc(beansProductDoc);
+
+      if (beansProductSnapshot.exists()) {
+        productData = { id: beansProductSnapshot.id, ...beansProductSnapshot.data() };
+      } else {
+        const toolsProductDoc = doc(dbService, 'Tools', productId);
+        const toolsProductSnapshot = await getDoc(toolsProductDoc);
+
+        if (toolsProductSnapshot.exists()) {
+          productData = { id: toolsProductSnapshot.id, ...toolsProductSnapshot.data() };
         } else {
-          const toolsProductDoc = doc(dbService, 'Tools', productId);
-          const toolsProductSnapshot = await getDoc(toolsProductDoc);
-  
-          if (toolsProductSnapshot.exists()) {
-            setSelectedProduct({ id: toolsProductSnapshot.id, ...toolsProductSnapshot.data() });
-          } else {
-            console.error('Product not found');
-          }
+          console.error('Product not found');
+          return;
         }
-      } catch (error) {
-        console.error('Error fetching product:', error);
       }
-    };
-  
+
+      setSelectedProduct(productData);
+
+      // Fetch like status and count
+      const user = authService.currentUser;
+      if (user) {
+        const likedDoc = doc(dbService, 'Liked', productId);
+        const likedDocSnapshot = await getDoc(likedDoc);
+
+        if (likedDocSnapshot.exists()) {
+          const likedByArray = likedDocSnapshot.data().likedBy || [];
+          const liked = likedByArray.includes(user.uid);
+
+          setIsLiked(liked);
+          setLikeCount(likedByArray.length);
+        } else {
+          setIsLiked(false);
+          setLikeCount(0);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching product:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchProduct();
   }, [productId]);
 
-  useEffect(() => {
-    const fetchLikeCount = async () => {
-      try {
-        const likedDocRef = doc(dbService, 'Liked', productId);
-        const likedDocSnapshot = await getDoc(likedDocRef);
 
-        if (likedDocSnapshot.exists()) {
-          // Set the like count based on the length of the likedBy array
-          setLikeCount(likedDocSnapshot.data().likedBy.length);
-        }
-      } catch (error) {
-        console.error('Error fetching like count:', error);
+  const fetchLikeCount = async () => {
+    try {
+      const likedDocRef = doc(dbService, 'Liked', productId);
+      const likedDocSnapshot = await getDoc(likedDocRef);
+  
+      if (likedDocSnapshot.exists()) {
+        const likedByArray = likedDocSnapshot.data().likedBy || [];
+        console.log('Number of userIds in likedBy:', likedByArray.length);
+        setLikeCount(likedByArray.length);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching like count:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchLikeCount();
   }, [productId]);
 
@@ -64,20 +89,17 @@ const Detail = () => {
     const user = authService.currentUser;
 
     if (user) {
-      // User is logged in
       navigate(`/Review/Write/${productId}`);
     } else {
-      // User is not logged in
       navigate('/Auth');
     }
   };
 
-  const formatPrice = (price) => { //가격 형식
+  const formatPrice = (price) => {
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
-    };
+  };
 
-
-  const getTypeString = (type) => { //타입
+  const getTypeString = (type) => {
     switch (type) {
       case 0:
         return '로스팅 홀빈';
@@ -94,68 +116,51 @@ const Detail = () => {
     return caffeineValue === 1 ? '카페인' : '디카페인';
   };
 
-  useEffect(() => {
-    const checkLikedStatus = async () => {
-      const user = authService.currentUser;
-  
-      if (user) {
-        // Check if the current user has liked the product
-        const likedDoc = doc(dbService, 'Liked', productId);
-        const likedDocSnapshot = await getDoc(likedDoc);
-        const liked = likedDocSnapshot.exists();
-        
-        setIsLiked(liked);
-      }
-    };
-  
-    checkLikedStatus();
-  }, [productId]);
-  
-
   const handleLike = async () => {
     const user = authService.currentUser;
-  
+
     if (user) {
       const likedDocRef = doc(dbService, 'Liked', productId);
-  
+
       if (!isLiked) {
-        // Like the product
-        await setDoc(likedDocRef, {
-          productId,
-          likedBy: [user.uid],
-          // Add additional product information here
-          name: selectedProduct.name,
-          image: selectedProduct.image,
-          type: selectedProduct.type,
-          brand: selectedProduct.brand,
-          rate: selectedProduct.rate,
-          price: selectedProduct.price
-        });
-        // Increase like count when liking
-        setLikeCount(likeCount + 1);
+        const likedDocSnapshot = await getDoc(likedDocRef);
+        if (likedDocSnapshot.exists()) {
+          // Update existing document
+          await updateDoc(likedDocRef, {
+            likedBy: [...likedDocSnapshot.data().likedBy, user.uid],
+          });
+        } else {
+          // Create new document
+          await setDoc(likedDocRef, {
+            productId,
+            likedBy: [user.uid],
+            name: selectedProduct.name,
+            image: selectedProduct.image,
+            type: selectedProduct.type,
+            brand: selectedProduct.brand,
+            rate: selectedProduct.rate,
+            price: selectedProduct.price
+          });
+        }
+        setLikeCount(prevCount => prevCount + 1);
       } else {
-        // Unlike the product
         const likedDocSnapshot = await getDoc(likedDocRef);
         const likedBy = likedDocSnapshot.data()?.likedBy || [];
         const updatedLikedBy = likedBy.filter((userId) => userId !== user.uid);
         await setDoc(likedDocRef, { likedBy: updatedLikedBy }, { merge: true });
-        // Decrease like count when unliking
-        setLikeCount(likeCount - 1);
+        setLikeCount(prevCount => prevCount - 1);
       }
-  
-      // Update the liked state
-      setIsLiked(!isLiked);
-    }
-    else{
+
+      setIsLiked(prevLiked => !prevLiked);
+    } else {
       navigate('/Auth');
     }
   };
-  
 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const reviewsQuery = query(collection(dbService, 'Reviews'), where('ProductID', '==', productId));
+        const reviewsQuery = query(collection(dbService, 'Reviews'), where('ID', '==', productId));
         const reviewsSnapshot = await getDocs(reviewsQuery);
   
         const reviewsData = reviewsSnapshot.docs.map((doc) => {
@@ -188,11 +193,15 @@ const Detail = () => {
     }
   };
         
+  
   if (!selectedProduct) {
-    return <div>Loading...</div>;
+    return (
+      <div className="loading-container">
+        Loading...
+      </div>
+    );
   }
-
-
+  
   return (
     <div className='detail-container'>
       <h2>{selectedProduct.name}</h2>
@@ -290,5 +299,5 @@ const Detail = () => {
 
     </div>
   );
-              }
+}
 export default Detail;

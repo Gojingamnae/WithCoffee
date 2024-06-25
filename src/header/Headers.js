@@ -1,20 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Link , useLocation, useNavigate} from 'react-router-dom';
-import { authService, dbService } from '../fbase';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { addDoc, collection } from 'firebase/firestore';
+import { dbService } from '../fbase';
 import logo from './HeaderLogo.png';
-import SearchIcon from './검색.png';
-import {
-  addDoc,
-  setDoc,
-  getDocs,
-  doc,
-  collection,
-  query,
-  onSnapshot,
-  orderBy,
-  serverTimestamp,
-  where,
-} from 'firebase/firestore';
+
 export default function Header() {
   const [searchInput, setSearchInput] = useState('');
   const navigate = useNavigate();
@@ -28,8 +17,7 @@ export default function Header() {
     // Save the search keyword to Firebase
     if (searchInput.trim() !== '') {
       try {
-        // Assuming you have a collection named 'searchKeywords' in Firestore
-        await addDoc(collection(doc(dbService, 'searchKeywords')),{
+        await addDoc(collection(dbService, 'searchKeywords'), {
           keyword: searchInput,
           timestamp: new Date(),
         });
@@ -41,11 +29,11 @@ export default function Header() {
     // Clear the search input
     setSearchInput('');
   };
-  
-  const AlertCom =(e)=>{
+
+  const AlertCom = (e) => {
     e.preventDefault();
-    alert("로그인후, 이용하실 수 있습니다")
-  }
+    alert('로그인후, 이용하실 수 있습니다');
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: '10%', padding: '0 20px',backgroundColor:'black' }}>
@@ -63,9 +51,6 @@ export default function Header() {
       value={searchInput}
       onChange={(e) => setSearchInput(e.target.value)}
     />
-    <button type="submit" style={{ backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '5px', padding: '0', cursor: 'pointer', height: '100%', margin: '0' }}>
-      <img src={SearchIcon} alt="검색" style={{ width: '20px', height: '23px', margin: '0' }} />
-    </button>
   </div>
 </form>
   <div style={{ flex: '1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
@@ -77,4 +62,5 @@ export default function Header() {
   </div>
   </div>  
   );
+
 }

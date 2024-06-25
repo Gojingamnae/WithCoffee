@@ -1,9 +1,10 @@
+// Tools.js
 import React, { useEffect, useState } from 'react';
 import { dbService } from '../fbase';
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get,  } from "firebase/database";
 import { Link, Route, useLocation } from 'react-router-dom';
 import ToolsLoadList from './ToolsLoadList';
-import { collection, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDocs, query, where,orderBy } from 'firebase/firestore';
 import shop from './shop.css';
 
 const Tools= () => { 
@@ -31,45 +32,27 @@ const Tools= () => {
  const ToolsRef = ref(db, 'Tools');
 //  const query = ToolsRef.limitToFirst(20);
 
- get(ToolsRef).then((snapshot) => {
-   if (snapshot.exists()) {
-     const products = [];
-     snapshot.forEach((childSnapshot) => {
-       const productId = childSnapshot.key;
-       const productData = childSnapshot.val();
-       // productId와 productData를 사용하여 필요한 작업 수행
-       products.push({
-         id: productId,
-         ...productData,
-       });
-     });
-     setProducts(products);
-   } else {
-     console.log("No data available");
-   }
- }).catch((error) => {
-   console.error("Error fetching data:", error);
- });
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const q = query(collection(dbService, 'Tools'), orderBy('purchaseCnt', 'desc'));
+      const querySnapshot = await getDocs(q);
+      const productsData = [];
+      querySnapshot.forEach((doc) => {
+        productsData.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      setProducts(productsData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const productsCollection = collection(dbService, 'Tools');
-  //       const querySnapshot = await getDocs(productsCollection);
+  fetchData(); // 인기순으로 데이터를 가져오도록 수정
 
-  //       const fetchedProducts = querySnapshot.docs.map(doc => ({
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       }));
-
-  //       setProducts(fetchedProducts);
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+}, []);
 
   useEffect(() => {
     const filtered = products.filter(product => {
@@ -219,12 +202,12 @@ const handleSortOrder = (value) => {
   setSortOrder((prevFilter) => (prevFilter === value ? '' : value));
 };
 
-
+const location = useLocation();
   return (
     <div className="shop-container">
       <nav className="shop-nav">
-        <li><Link to="/shop/Beans">원두</Link></li>
-        <li><Link to="/shop/Tools">도구</Link></li>
+      <li><Link to="/shop/Beans" className={location.pathname === '/shop/Beans' ? 'active-link' : ''}>원두</Link></li>
+      <li><Link to="/shop/Tools" className={location.pathname === '/shop/Tools' ? 'active-link' : ''}>도구</Link></li>
       </nav>
 
       <div className="filter-container">

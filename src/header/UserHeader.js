@@ -111,9 +111,7 @@ export default function Header() {
                 }
               }}
             />
-            <button type="submit" style={{ backgroundColor: 'white', border: '1px solid #ccc', borderRadius: '5px', padding: '0', cursor: 'pointer', height: '100%', margin: '0' }}>
-              <img src={SearchIcon} alt="검색" style={{ width: '25px', height: '33px', margin: '0' }} />
-            </button>
+          
           </div>
         </div>
       </form>
@@ -122,7 +120,7 @@ export default function Header() {
         <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', height: '100%' }}>
         <Link to="/shop/Beans" style={{ textDecoration: 'none', color: 'white', marginRight: '20px' }}>쇼핑</Link>
         <div style={{ cursor: 'pointer', textDecoration: 'none', color: 'white', fontWeight: 'bold', marginRight: '20px' }}>
-          <Link to="/community" style={{ textDecoration: 'none', color: 'white' }}>커뮤니티</Link>
+          <Link to="/community/popular" style={{ textDecoration: 'none', color: 'white' }}>커뮤니티</Link>
         </div>
       </div>
         {/* My Page Dropdown */}
